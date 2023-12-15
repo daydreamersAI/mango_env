@@ -1,5 +1,5 @@
 '''
-Here we use the graph and prompt to create an environment that executes actions in the and update location in the graph
+Here we use prompt to create an environment that executes actions and takes in screenshots beofre deciding on the next action
 '''
 
 import pyautogui 
