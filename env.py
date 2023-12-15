@@ -167,17 +167,14 @@ class Env():
 if __name__ == "__main__":
     # task = input("Enter the prompt: ")
     task = "Draw a circle with diameter 10 starting from 20 units above the current location"
-    E = Env( task)
-    # print(E.graph)
-    # print(E.graph.nodes)
-    # print(E.graph.nodes['Goal Achieved'])
-    # print(E.graph.nodes['Goal Achieved']['coords'])
-    # print(E.get_observation())
+    E = Env(task)
+    
     E.reset()
     time.sleep(2)
-    #E.get_observation()
+    # E.get_observation()
     #E.render()
-
+    
+    
     coordinates = { 'start_loc' : (500,500),
                 "pensil" : (320,125),
                 "fill" : (375,115),
@@ -198,6 +195,15 @@ if __name__ == "__main__":
                 "youtube_search_button" : (1229,129), 
                 "chrome_profile_vivek" : (1300,472),
     }
+
+####################
+    '''
+    Replace this with your model .....
+    action = Model(E.prompt,E.get_observation)
+
+    '''
+####################
+    
     action = {'class': 'Scroll', 'direction': "down"}
     obs,rew,done,info = E.step(action)
     time.sleep(1)

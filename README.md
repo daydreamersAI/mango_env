@@ -18,6 +18,10 @@ two types of envs are together :
 Below is some set of example actions being executed using this env which have been fed manually
 Try out your set of actions and have fun... :]
 
+Usage:
+Runs directly and insert your model architecture that returns the required action
+
+
 Todo:
 1) Add selenium env
 2) make a module once the agent is working
