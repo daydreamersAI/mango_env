@@ -9,43 +9,22 @@ import networkx as nx
 import json
 import matplotlib.pyplot as plt
 import time
+import platform
 
+USER_QUESTION = "Hello, I can help you with anything. What would you like done?"
 
 class Env():
-    def __init__(self, graph_file, prompt):
-        self.graph = None
-        self.load_graph(graph_file) # load the graph from the json file
+    def __init__(self, prompt):
         self.prompt = prompt
-        # self.current_location = None
-        # self.current_node = None
         self.observation = None
-        # self.action_sequence = []
-        # self.action_sequence_index = 0
-        # self.action_sequence_length = len(self.action_sequence)
-        # self.action = None
-        # self.action_index = 0
-        # self.action_length = len(self.action)
-        # self.state = None
-        # self.state_index = 0
-        # self.state_length = len(self.state)
-        # self.reward = 0
-        # self.done = False
+        
         self.time_step = 0
         
     def step(self, action=dict()):
-        # self.action = action
-        # self.action_index += 1
-        # self.action_length = len(self.action)
-        # self.action_sequence.append(self.action)
-        # self.action_sequence_index += 1
-        # self.action_sequence_length = len(self.action_sequence)
-        
+        input('about to take another step, proceed ?')
         self.state = self.get_state()
-        # self.state_index += 1
-        # self.state_length = len(self.state)
         self.reward = self.get_reward()
-        # self.done = self.get_done()
-        # self.info = self.get_info()
+        
         if self.state == "Goal Achieved" and self.reward == 1:
             self.done = True
 
@@ -78,19 +57,19 @@ class Env():
         return self.observation, self.reward, self.done, self.info
 
     def reset(self):
+        import os
         self.time_step = 0
-        # self.action_sequence = []
-        # self.action_sequence_index = 0
-        # self.action_sequence_length = len(self.action_sequence)
-        # self.action = None
-        # self.action_index = 0
-        # self.action_length = len(self.action)
-        # self.state = None
-        # self.state_index = 0
-        # self.state_length = len(self.state)
-        # self.reward = 0
-        # self.done = False
-        # self.info = None
+        # Get user input using the prompt function
+
+        print(f'[Self-Operating Computer]\n{USER_QUESTION}')
+        print(f"[User]")
+        user_input = input('Enter a command: ')
+
+        # Display the user's input
+        print('You entered:', user_input)
+
+        input('proceed?')
+        
         return self.observation
 
     def load_graph(self, graph_file):
@@ -153,10 +132,6 @@ class Env():
     def process_screenshot(self, screenshot):
         # Example: Convert the screenshot to a numpy array
         observation = np.array(screenshot)
-
-        # You might need to resize or preprocess the image based on your RL model requirements
-        # observation = preprocess(observation)
-
         return observation
 
     def keyboard_type(self,text):
@@ -192,7 +167,7 @@ class Env():
 if __name__ == "__main__":
     # task = input("Enter the prompt: ")
     task = "Draw a circle with diameter 10 starting from 20 units above the current location"
-    E = Env('graphs/graph_graph2.json', task)
+    E = Env( task)
     # print(E.graph)
     # print(E.graph.nodes)
     # print(E.graph.nodes['Goal Achieved'])
@@ -223,8 +198,21 @@ if __name__ == "__main__":
                 "youtube_search_button" : (1229,129), 
                 "chrome_profile_vivek" : (1300,472),
     }
+    action = {'class': 'Scroll', 'direction': "down"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(1)
+    action = {'class': 'Scroll', 'direction': "down"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(1)
+    action = {'class': 'Scroll', 'direction': "down"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(1)
+    
+    # E.render()
 
-    # open youtube and play video of elon musk on openai
+'''
+example usage of actions 
+# open youtube and play video of elon musk on openai
     action = {'class': 'Double Click', 'coords': coordinates['chrome_icon']}
     obs,rew,done,info = E.step(action)
     time.sleep(3)
@@ -250,5 +238,4 @@ if __name__ == "__main__":
     obs,rew,done,info = E.step(action)
     time.sleep(1)
     
-    
-    # E.render()
+'''
