@@ -1,0 +1,68 @@
+'''
+paint example :
+
+action = {'class': 'Click', 'coords': coordinates['pensil']}
+print(action)
+obs,rew,done,info = E.step(action)
+print(rew,done,info)
+time.sleep(1)
+action = {'class': 'Move', 'coords': coordinates['centre']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Drag', 'start_coords' : coordinates['centre'], 'end_coords' : coordinates['A']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Drag', 'start_coords' : coordinates['centre'], 'end_coords' : coordinates['B']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Drag', 'start_coords' : coordinates['centre'], 'end_coords' : (800,500)}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Click', 'coords': coordinates['text']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Click', 'coords': (700,700)}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Type', 'content': "Hello World ! My env working fine"}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Click', 'coords': coordinates['rectangle']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Move', 'coords': coordinates['centre']}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+action = {'class': 'Drag', 'start_coords' : coordinates['centre'], 'end_coords' : (600,600)}
+obs,rew,done,info = E.step(action)
+time.sleep(1)
+'''
+# open youtube and play video of elon musk on openai
+'''
+  # open youtube and play video of elon musk on openai
+    action = {'class': 'Double Click', 'coords': coordinates['chrome_icon']}
+    obs,rew,done,info = E.step(action)
+    time.sleep(3)
+    action = {'class': 'Double Click', 'coords': coordinates['chrome_profile_vivek']}
+    obs,rew,done,info = E.step(action)
+    time.sleep(3)
+    action = {'class': 'Double Click', 'coords': coordinates['youtube']}
+    obs,rew,done,info = E.step(action)
+    time.sleep(3)
+    action = {'class': 'Click', 'coords': coordinates['youtube_search_bar']}
+    obs,rew,done,info = E.step(action)
+    time.sleep(3)
+    action = {'class': 'Type', 'content': "elon musk on openai"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(3)
+    action = {'class': 'Click', 'coords': coordinates['youtube_search_button']}
+    obs,rew,done,info = E.step(action)
+    time.sleep(2)
+    action = {'class': 'Scroll', 'direction': "down"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(1)
+    action = {'class': 'Scroll', 'direction': "down"}
+    obs,rew,done,info = E.step(action)
+    time.sleep(1)
+    
+'''
