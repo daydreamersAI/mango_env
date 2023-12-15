@@ -1,5 +1,6 @@
 # mango_env
-The different environments for the mango bot 
+The different environments for the mango bot :
+
 Mango bot(agent based on this environment) will be released soon 
 Join discord to help with the agent - https://discord.gg/Cfa7ACqr
 # mango bot
