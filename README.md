@@ -20,11 +20,15 @@ Below is some set of example actions being executed using this env which have be
 Try out your set of actions and have fun... :]
 
 # Usage: 
+
+In the terminal
+
 1) git clone https://github.com/daydreamersAI/mango_env.git
 2) cd mango_env
 3) pip install -r requirements.txt
 4) insert your model code inside the model.py
-5) python main.py
+5) export OPENAI_API_KEY='paste your openai vision api key'
+6) python main.py
 
 
 # Todo:
