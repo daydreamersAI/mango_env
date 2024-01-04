@@ -59,9 +59,9 @@ coordinates = { 'start_loc' : (500,500),
     }     
 '''
 actor_prompt ='''Now please return only the action dictionary for current state. The non perfect action sequence is provided and you don't have to strictly follow it.
-You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working   
+You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working. The action sequence is : 
 '''  
-actor_prompt_task = '''with task:
+actor_prompt_task = '''\n The task for which you need to return action dictionary of type {'class': 'Double Click', 'coords': coordinates['youtube']} is : 
 '''
 policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
 '''
@@ -133,9 +133,10 @@ if __name__ == "__main__":
     print(action_sequence)
     input('proceed to taking the actions? ')
     for i in range(actions_length):
-        action = model.generate_action(env.img_path,msg = msg + actor_prompt)
+        final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task
+        action = model.generate_action(env.img_path,msg = final_prompt)
         print(action)
-        input('this was the output, proceed?')
+        input('this was the action, proceed?')
         obs,rew,done,info = env.step(action)
         time.sleep(2)
         print(obs,rew,done,info)
