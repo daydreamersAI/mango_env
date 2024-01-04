@@ -218,7 +218,7 @@ if __name__ == "__main__":
 
 '''
 example usage of actions 
-# open youtube and play video of elon musk on openai
+task = open youtube and play video of elon musk on openai
     action = {'class': 'Double Click', 'coords': coordinates['chrome_icon']}
     obs,rew,done,info = E.step(action)
     time.sleep(3)
