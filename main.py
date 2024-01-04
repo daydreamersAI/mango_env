@@ -61,7 +61,9 @@ coordinates = { 'start_loc' : (500,500),
 actor_prompt ='''Now please return only the action dictionary for current state. The non perfect action sequence is provided and you don't have to strictly follow it.
 You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working. The action sequence is : 
 '''  
-actor_prompt_task = '''\n The task for which you need to return action dictionary of type {'class': 'Double Click', 'coords': coordinates['youtube']} is : 
+actor_prompt_task = '''\nYou need to return only the action dictionary of type given below:
+$ {'class': 'Double Click', 'coords': coordinates['youtube']} $
+The task is : 
 '''
 policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
 '''
@@ -101,9 +103,26 @@ action_sequence_prompt = "create a sequence of actions to reach the goal state f
     + prompt1a + '\n' + prompt2 + "\n" + prompt3 + prompt_4 + "Now only provide the action sequence an nothing else for the task :"
 
 import time
+import json
+
+def parse_action(action_str = '{"class": "Double Click", "coords": coordinates["chrome_icon"]}'):
+    
+    # # Extract the dictionary from the string
+    # start_index = action_str.find("{")
+    # end_index = action_str.rfind("}")
+    # action_dict_str = action_str[start_index:end_index + 1]
+
+    # Using ast.literal_eval to safely evaluate the string as a Python literal
+    action_dict = json.loads(action_str)
+    return action_dict
+    # print(action_dict)
+
 
 
 if __name__ == "__main__":
+    k = parse_action()
+    print(k)
+    input('proceed?')
     print('lets go')
     # task = input("Enter the prompt: ")
     # task = "Draw a circle with diameter 10 starting from 20 units above the current location"
@@ -130,17 +149,25 @@ if __name__ == "__main__":
     actions_length = len(actions_list)
 
     #action_sequence = chat_model.generate_completion()
+    print('This is the action sequence : ')
     print(action_sequence)
     input('proceed to taking the actions? ')
+
+    
+
     for i in range(actions_length):
         final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task
         action = model.generate_action(env.img_path,msg = final_prompt)
+        print('below is the action produced : ')
         print(action)
-        input('this was the action, proceed?')
+        print('action type is :', {type(action)})
+        input('this was the type of action, proceed?')
+        action = action[:9]
+        action = parse_action(action)
+        
         obs,rew,done,info = env.step(action)
         time.sleep(2)
         print(obs,rew,done,info)
         input('action taken, proceed?')
-
 
 
