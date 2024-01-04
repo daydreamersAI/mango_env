@@ -33,7 +33,7 @@ class Decision_Model():
         completion = gpt4v_chat_model.generate_completion(user_message, image_path)
         print(completion)
         input('this was the output, proceed ?')
-        return {'class': 'Scroll', 'direction': "down"}    
+        return completion   
 
 
 #testing the gpt4 vision api

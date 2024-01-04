@@ -49,10 +49,10 @@ coordinates = { 'start_loc' : (500,500),
                 "youtube_search_bar" : (730,131),
                 "youtube_search_button" : (1229,129), 
                 "chrome_profile_vivek" : (1300,472),
-    }
-Now please return only the action dictionary for current state, with task:    
-
+    }     
 '''
+actor_prompt ='''Now please return only the action dictionary for current state, with task: 
+'''  
 coordinates = { 'start_loc' : (500,500),
                 "pensil" : (320,125),
                 "fill" : (375,115),
@@ -73,12 +73,15 @@ coordinates = { 'start_loc' : (500,500),
                 "youtube_search_button" : (1229,129), 
                 "chrome_profile_vivek" : (1300,472),
     }
+import time
+
 
 if __name__ == "__main__":
     print('lets go')
     # task = input("Enter the prompt: ")
     # task = "Draw a circle with diameter 10 starting from 20 units above the current location"
     task = "click on search box"
+    task = "play a cartoon video on youtube"
     env = Env(task)
 
     model = Decision_Model(task)
@@ -87,7 +90,10 @@ if __name__ == "__main__":
     action = model.generate_action(env.img_path,msg = msg)
 
     obs,rew,done,info = env.step(action)
+    time.sleep(2)
 
+    # now testing the looping function :
+    for i in range(len(actions_steps))
 
 
 
