@@ -68,21 +68,22 @@ class GPT4VisionChatModel:
 
         response = requests.post(self.api_url, headers=headers, json=payload)
         output = response.json()['choices'][0]['message']['content']
+        #output = response.json()
         # return response.json() #, output
         # return response.json(), output
         return output
 
 # # Example usage:
-# if __name__ == "__main__":
-#     # Initialize the GPT-4 vision chat model
-#     gpt4_chat_model = GPT4VisionChatModel(api_key=client.api_key)
+if __name__ == "__main__":
+    # Initialize the GPT-4 vision chat model
+    gpt4_chat_model = GPT4VisionChatModel(api_key=client.api_key)
 
-#     # User's message and image path
-#     user_message = "What’s in this image?"
-#     image_path = "screenshots/screenshot10.jpg"
+    # User's message and image path
+    user_message = "What’s in this image?"
+    image_path = "screenshots/screenshot0.jpg"
 
-#     # Generate completion
-#     # jsn, completion = gpt4_chat_model.generate_completion(user_message, image_path)
-#     completion = gpt4_chat_model.generate_completion(user_message, image_path)
-#     # print(jsn)
-#     print(completion)    
+    # Generate completion
+    # jsn, completion = gpt4_chat_model.generate_completion(user_message, image_path)
+    completion = gpt4_chat_model.generate_completion(user_message, image_path)
+    # print(jsn)
+    print(completion)    

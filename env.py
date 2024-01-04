@@ -17,7 +17,7 @@ class Env():
     def __init__(self, prompt):
         self.prompt = prompt
         self.observation = None
-        
+        self.img_path = "screenshots/screenshot0.jpg"
         self.time_step = 0
         
     def step(self, action=dict()):
@@ -84,7 +84,6 @@ class Env():
         image_pil = Image.fromarray(self.observation)
         image_pil.show()
         
-
     def close(self):
         pass
 
@@ -124,9 +123,10 @@ class Env():
         observation = self.process_screenshot(screenshot)
         self.observation = observation # added by vivek
         k = self.time_step
-        path = 'screenshots/screenshot' + str(k) + '.jpg'
+        # path = 'screenshots/screenshot' + str(k) + '.jpg' for multiple screenshots
+        path = 'screenshots/screenshot' + '.jpg' # for one path 
         screenshot.save(path)
-
+        self.image_path = path
         return observation
     
     def process_screenshot(self, screenshot):
