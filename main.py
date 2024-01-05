@@ -14,27 +14,27 @@ client.api_key = os.getenv("OPENAI_API_KEY")
 system_prompt = '''
 You are a web interaction agent. You are going to help the actor by coming up with a high level strategy for performing the task in hand.
 You will be given screenshot image as the current observation and a high level task. Your job is to come up with actions which are in this form :
-action = {'class': 'Double Click', 'coords': coordinates['chrome_icon']}
+action = {"class": "Double Click", "coords": "chrome_icon"}
 The actions available are Type, Drag, Click, Double Click, Move and Scroll. 
 The environment takes one action at each step and returns the new observation and reward and done state.
 You can also use the coordinates dictionary to get the coordinates of the icons etc. 
 Below is an example action plan executed :
 task = 'open youtube and play video of elon musk on openai'
-    action = {'class': 'Double Click', 'coords': coordinates['chrome_icon']}
+    action = {"class": "Double Click", "coords": "chrome_icon"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Double Click', 'coords': coordinates['chrome_profile_vivek']}
+    action = {"class": "Double Click", "coords": "chrome_profile_vivek"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Double Click', 'coords': coordinates['youtube']}
+    action = {"class": "Double Click", "coords": "youtube"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Click', 'coords': coordinates['youtube_search_bar']}
+    action = {"class": "Click", "coords": "youtube_search_bar"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Type', 'content': "elon musk on openai"}
+    action = {"class": "Type", "content": "elon musk on openai"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Click', 'coords': coordinates['youtube_search_button']}
+    action = {"class": "Click", "coords": "youtube_search_button"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Scroll', 'direction': "down"}
+    action = {"class": "Scroll", "direction": "down"}
     obs,rew,done,info = E.step(action)
-    action = {'class': 'Scroll', 'direction': "down"}
+    action = {"class": "Scroll", "direction": "down"}
     obs,rew,done,info = E.step(action)
 The coordinates to use are :
 coordinates = { 'start_loc' : (500,500),
@@ -59,10 +59,11 @@ coordinates = { 'start_loc' : (500,500),
     }     
 '''
 actor_prompt ='''Now please return only the action dictionary for current state. The non perfect action sequence is provided and you don't have to strictly follow it.
-You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working. The action sequence is : 
+You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working.
+The form of the action should be in the form like {"class": "Double Click", "coords": "youtube"}. The action sequence is : 
 '''  
 actor_prompt_task = '''\nYou need to return only the action dictionary of type given below:
-$ {'class': 'Double Click', 'coords': coordinates['youtube']} $
+$ {"class": "Double Click", "coords": "youtube"} $
 The task is : 
 '''
 policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
@@ -103,25 +104,116 @@ action_sequence_prompt = "create a sequence of actions to reach the goal state f
     + prompt1a + '\n' + prompt2 + "\n" + prompt3 + prompt_4 + "Now only provide the action sequence an nothing else for the task :"
 
 import time
-import json
+# import ast
+# import json
 
-def parse_action(action_str = '{"class": "Double Click", "coords": coordinates["chrome_icon"]}'):
+# def parse_action(action_str = '{"class": "Double Click", "coords": coordinates["chrome_icon"]}'):
     
-    # # Extract the dictionary from the string
-    # start_index = action_str.find("{")
-    # end_index = action_str.rfind("}")
-    # action_dict_str = action_str[start_index:end_index + 1]
+#     # # Extract the dictionary from the string
+#     # start_index = action_str.find("{")
+#     # end_index = action_str.rfind("}")
+#     # action_dict_str = action_str[start_index:end_index + 1]
 
-    # Using ast.literal_eval to safely evaluate the string as a Python literal
-    action_dict = json.loads(action_str)
-    return action_dict
-    # print(action_dict)
+#     # Using ast.literal_eval to safely evaluate the string as a Python literal
+#     action_dict = json.loads(action_str)
+#     return action_dict
+#     # print(action_dict)
 
+# import re
 
+coordinates = {
+    'start_loc': (500, 500),
+    "pensil": (320, 125),
+    "fill": (375, 115),
+    "brush": (500, 130),
+    "eraser": (325, 175),
+    "line": (580, 110),
+    "rectangle": (665, 117),
+    "circle": (50, 50),
+    "triangle": (60, 60),
+    "centre": (500, 500),
+    "A": (400, 400),
+    "B": (600, 400),
+    "text": (425, 120),
+    "youtube": (1091, 586),
+    "chrome_icon": (1096, 385),
+    "chrome_search_bar": (508, 75),
+    "youtube_search_bar": (730, 131),
+    "youtube_search_button": (1229, 129),
+    "chrome_profile_vivek": (1300, 472),
+}
+
+# def parse_action(action_str):
+#     # Extract the dictionary part from the string
+#     start_index = action_str.find("{")
+#     end_index = action_str.rfind("}")
+#     action_dict_str = action_str[start_index:end_index + 1]
+
+#     try:
+#         # Use eval with a controlled environment
+#         action_dict = eval(action_dict_str, {'coordinates': coordinates})
+#     except Exception as e:
+#         print(f"Error evaluating dictionary: {e}")
+#         return None
+
+#     # Convert 'coords' value to string
+#     coords_value = str(action_dict.get('coords', ''))
+
+#     # Extract the coordinates key using a regular expression
+#     match = re.match(r"coordinates\['(.+?)'\]", coords_value)
+
+#     # If the match is found, use the captured group as the dynamic key
+#     dynamic_key = match.group(1) if match else None
+
+#     # Replace the Subscript object with the actual coordinates using the dynamic key
+#     action_dict['coords'] = coordinates.get(dynamic_key, None)
+
+#     return action_dict
+
+def create_action(input_dict = {"class": "Click", "coords": "chrome_search_bar"}):
+    ans = {}
+    ans["class"] = 'ok'
+    if input_dict["class"] == "Click" or input_dict["class"] == "Double Click" or input_dict["class"] == "Move":
+        ans["class"] = input_dict["class"]
+        if input_dict["coords"] in coordinates:
+            ans["coords"] = coordinates[input_dict["coords"]]
+            # print(ans)
+        else:
+            print(f"Error: Coordinates not found for key '{input_dict['coords']}'")
+
+    elif input_dict["class"] == "Drag":
+        ans["class"] = input_dict["class"]
+        if input_dict["start_coords"] in coordinates:
+            ans["start_coords"] = coordinates[input_dict["start_coords"]]
+            # print(ans)
+        elif input_dict["end_coords"] in coordinates:
+            ans["end_coords"] = coordinates[input_dict["end_coords"]]
+            # print(ans)    
+        else:
+            print(f"Error: Coordinates not found for key '{input_dict['coords']}'")
+    else:
+        ans = input_dict
+        print(ans)
+    return ans
+
+import json
+def parser_2(action_str):
+    data_string = '{"class": "Click", "coords": "chrome_search_bar"}'
+    data_dict = json.loads(data_string)
+    return data_dict
 
 if __name__ == "__main__":
-    k = parse_action()
-    print(k)
+    input('proceed?')
+    action_str = '{"class": "Click", "coords": "chrome_search_bar"}'
+    g = parser_2(action_str)
+    print('this is the g: ',g)
+    input("proceed ?")
+    m = create_action(g)
+    print(m)
+
+    input('masti done proceed ?')
+    #k = parse_action()
+    #print(k)
     input('proceed?')
     print('lets go')
     # task = input("Enter the prompt: ")
@@ -162,9 +254,9 @@ if __name__ == "__main__":
         print(action)
         print('action type is :', {type(action)})
         input('this was the type of action, proceed?')
-        action = action[:9]
-        action = parse_action(action)
-        
+        # action = action[:9]
+        action = parser_2(action)
+        action = create_action(action)
         obs,rew,done,info = env.step(action)
         time.sleep(2)
         print(obs,rew,done,info)
