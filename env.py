@@ -17,7 +17,7 @@ class Env():
     def __init__(self, prompt):
         self.prompt = prompt
         self.observation = None
-        self.img_path = "screenshots/screenshot0.jpg"
+        self.img_path = "screenshots/screenshot.jpg"
         self.time_step = 0
         
     def step(self, action=dict()):
@@ -60,15 +60,15 @@ class Env():
         import os
         self.time_step = 0
         # Get user input using the prompt function
-
-        print(f'[Self-Operating Computer]\n{USER_QUESTION}')
-        print(f"[User]")
-        user_input = input('Enter a command: ')
+        self.observation = self.get_observation()
+        # print(f'[Self-Operating Computer]\n{USER_QUESTION}')
+        # print(f"[User]")
+        # user_input = input('Enter a command: ')
 
         # Display the user's input
-        print('You entered:', user_input)
+        # print('You entered:', user_input)
 
-        input('proceed?')
+        # input('proceed?')
         
         return self.observation
 

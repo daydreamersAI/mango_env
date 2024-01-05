@@ -63,9 +63,10 @@ You may change the course if you feel so according to the state in the screensho
 The form of the action should be in the form like {"class": "Double Click", "coords": "youtube"}. The action sequence is : 
 '''  
 actor_prompt_task = '''\nYou need to return only the action dictionary of type given below:
-$ {"class": "Double Click", "coords": "youtube"} $
+{"class": "Double Click", "coords": "youtube"}
 The task is : 
 '''
+# here the type to be returned needs to be studied
 policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
 '''
 coordinates = { 'start_loc' : (500,500),
@@ -198,18 +199,18 @@ def create_action(input_dict = {"class": "Click", "coords": "chrome_search_bar"}
 
 import json
 def parser_2(action_str):
-    data_string = '{"class": "Click", "coords": "chrome_search_bar"}'
+    data_string = action_str
     data_dict = json.loads(data_string)
     return data_dict
 
 if __name__ == "__main__":
-    input('proceed?')
-    action_str = '{"class": "Click", "coords": "chrome_search_bar"}'
-    g = parser_2(action_str)
-    print('this is the g: ',g)
-    input("proceed ?")
-    m = create_action(g)
-    print(m)
+    # input('proceed?')
+    # action_str = '{"class": "Click", "coords": "chrome_search_bar"}'
+    # g = parser_2(action_str)
+    # print('this is the g: ',g)
+    # input("proceed ?")
+    # m = create_action(g)
+    # print(m)
 
     input('masti done proceed ?')
     #k = parse_action()
@@ -220,7 +221,10 @@ if __name__ == "__main__":
     # task = "Draw a circle with diameter 10 starting from 20 units above the current location"
     task = "click on search box"
     task = "play a cartoon video on youtube"
+    task = "draw a rectangle in paint, given you are already in paint"
     env = Env(task)
+    env.reset()
+    input("screenshot saved proceed?")
 
     model = Decision_Model(task)
     # so this should take in image and task from the environment 
@@ -245,8 +249,6 @@ if __name__ == "__main__":
     print(action_sequence)
     input('proceed to taking the actions? ')
 
-    
-
     for i in range(actions_length):
         final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task
         action = model.generate_action(env.img_path,msg = final_prompt)
@@ -256,7 +258,9 @@ if __name__ == "__main__":
         input('this was the type of action, proceed?')
         # action = action[:9]
         action = parser_2(action)
+        input(f"the action we got from parser is : {action}\n Proceed now ?")
         action = create_action(action)
+        input(f"the action we are going to take is : {action}\n Proceed now ?")
         obs,rew,done,info = env.step(action)
         time.sleep(2)
         print(obs,rew,done,info)
