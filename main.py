@@ -62,12 +62,18 @@ actor_prompt ='''Now please return only the action dictionary for current state.
 You may change the course if you feel so according to the state in the screenshot of the image, its just for high level direction of working.
 The form of the action should be in the form like {"class": "Double Click", "coords": "youtube"}. The action sequence is : 
 '''  
-actor_prompt_task = '''\nYou need to return only the action dictionary of type given below:
+# lets try by changing this to check the status
+actor_prompt_task = '''\nYou have to check the last image to verify if the last task was done
+You need to return only the action dictionary of type given below:
 {"class": "Double Click", "coords": "youtube"}
 The task is : 
 '''
 # here the type to be returned needs to be studied
 policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
+'''
+
+completed_status_prompt = '''
+
 '''
 coordinates = { 'start_loc' : (500,500),
                 "pensil" : (320,125),
@@ -103,6 +109,8 @@ prompt_4 = "This is the current state : home screen of the computer\n"
 
 action_sequence_prompt = "create a sequence of actions to reach the goal state from the start state from the prompt given below. Please describe it step by step and dont include the steps which need not be performed while performing the specific action.\nThis is the example output: \nSend a message to Tom on instagram inviting him for birthday party.\nThe steps are :\n1)open the instagram app\n2)click on the chats section\n3)type Tom in the scroll bar\n4)type the birthday message in the text box.\n5)click on the send button.\nNow the new prompt is :\n" \
     + prompt1a + '\n' + prompt2 + "\n" + prompt3 + prompt_4 + "Now only provide the action sequence an nothing else for the task :"
+
+state_change_prompt = 'You have to check weather the action has been performed looking at the updated screenshot and return True along with the reason. The action performed was :'
 
 import time
 # import ast
@@ -251,13 +259,14 @@ if __name__ == "__main__":
 
     for i in range(actions_length):
         final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task
-        action = model.generate_action(env.img_path,msg = final_prompt)
+        action_str = model.generate_action(env.img_path,msg = final_prompt) # here vision could also be passed
+        #action_str = chat_model.generate_action(msg = final_prompt)
         print('below is the action produced : ')
         print(action)
         print('action type is :', {type(action)})
         input('this was the type of action, proceed?')
         # action = action[:9]
-        action = parser_2(action)
+        action = parser_2(action_str)
         input(f"the action we got from parser is : {action}\n Proceed now ?")
         action = create_action(action)
         input(f"the action we are going to take is : {action}\n Proceed now ?")
@@ -265,5 +274,24 @@ if __name__ == "__main__":
         time.sleep(2)
         print(obs,rew,done,info)
         input('action taken, proceed?')
+        input('About to check the vision state change status, proceed?')
+        msg = state_change_prompt + action_str
+        Done_signal = model.generate_action(env.img_path, msg = msg)
+        print('Done signal is : ', Done_signal)
+        input('proceed? ')
+
+
+
+#Here we may check the progress with the vision thingie and send back the status to the main promp
+''' 
+Lets now think about the key things we would need inside the model:
+1) Screenshot analysis - with content of the task given
+2) Grounding of the screenshot using some algo 
+3) Some way to detect coordinates from the vision api or other models on the screen
+4) Previous action analysis if it is executed and if the execution is correct
+5) Next action and reflexion over the plan may be needed.
+6) a method to train all this on the dataset
+
+'''
 
 
