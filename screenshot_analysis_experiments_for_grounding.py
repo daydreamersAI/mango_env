@@ -86,9 +86,9 @@ if __name__ == "__main__":
     # User's message and image path
     # user_message = "What’s in this image?"
     # user_message = Prompt + '1920x1080' + "Can you describe the image ?"
-    user_message = "Can you describe the image ?"
-    image_path = "screenshots/screenshot_1920x1080.jpg"
-
+    user_message = "Can you see the cursor in the image and describe its location ?"
+    # image_path = "screenshots/screenshot_1920x1080.jpg"
+    image_path = "screenshot_with_cursor.png"
     # Generate completion
     # jsn, completion = gpt4_chat_model.generate_completion(user_message, image_path)
     completion = gpt4_chat_model.generate_completion(user_message, image_path)
