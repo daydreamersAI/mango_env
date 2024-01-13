@@ -69,7 +69,7 @@ You need to return only the action dictionary of type given below:
 The task is : 
 '''
 # here the type to be returned needs to be studied
-policy_prompt = ''' Now please give a high level action policy and nothing else to reach the target for the task:
+policy_prompt = ''' Now please give a high level step by step action policy along with the reason and nothing else to reach the target for the task:
 '''
 
 completed_status_prompt = '''
@@ -110,8 +110,8 @@ prompt_4 = "This is the current state : home screen of the computer\n"
 action_sequence_prompt = "create a sequence of actions to reach the goal state from the start state from the prompt given below. Please describe it step by step and dont include the steps which need not be performed while performing the specific action.\nThis is the example output: \nSend a message to Tom on instagram inviting him for birthday party.\nThe steps are :\n1)open the instagram app\n2)click on the chats section\n3)type Tom in the scroll bar\n4)type the birthday message in the text box.\n5)click on the send button.\nNow the new prompt is :\n" \
     + prompt1a + '\n' + prompt2 + "\n" + prompt3 + prompt_4 + "Now only provide the action sequence an nothing else for the task :"
 
-state_change_prompt = 'You have to check weather the action has been performed looking at the updated screenshot and return True along with the reason. The action performed was :'
-
+state_change_prompt = 'You have to check weather the action has been performed looking at the updated screenshot and return True or False along with the reason. This is the form of it done signal : and reason : . The action performed was :'
+# the reason may be asked too but lets add that later 
 import time
 # import ast
 # import json
@@ -206,10 +206,22 @@ def create_action(input_dict = {"class": "Click", "coords": "chrome_search_bar"}
     return ans
 
 import json
+import re
 def parser_2(action_str):
-    data_string = action_str
+    pattern = r'json\n(.*?)\n'
+    match = re.search(pattern, action_str, re.DOTALL)
+    if match:
+        input('match found proceed ?')
+        json_string = match.group(1)
+    else :
+        json_string = action_str
+    data_string = json_string
     data_dict = json.loads(data_string)
     return data_dict
+
+def parse_done(signal):
+    return 'True', 'timepass'
+
 
 if __name__ == "__main__":
     # input('proceed?')
@@ -230,6 +242,7 @@ if __name__ == "__main__":
     task = "click on search box"
     task = "play a cartoon video on youtube"
     task = "draw a rectangle in paint, given you are already in paint"
+    print("the task is - ", task)
     env = Env(task)
     env.reset()
     input("screenshot saved proceed?")
@@ -256,15 +269,21 @@ if __name__ == "__main__":
     print('This is the action sequence : ')
     print(action_sequence)
     input('proceed to taking the actions? ')
-
+    done_signal = 'True'
+    reason = 'This is the first action so no reason'
     for i in range(actions_length):
-        final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task
+        done_signal
+        final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task + 'Also keep in mind to return only one action at one time' + 'Also the done signal and reason for the last action are given here:'+ done_signal + 'and reason: ' + reason
+        input("the prompt that will be given to the vision model is as follows : \n")
+        # print(final_prompt)
         action_str = model.generate_action(env.img_path,msg = final_prompt) # here vision could also be passed
         #action_str = chat_model.generate_action(msg = final_prompt)
         print('below is the action produced : ')
-        print(action)
-        print('action type is :', {type(action)})
+        print(action_str)
+        print('action type is :', {type(action_str)})
         input('this was the type of action, proceed?')
+
+
         # action = action[:9]
         action = parser_2(action_str)
         input(f"the action we got from parser is : {action}\n Proceed now ?")
@@ -276,9 +295,10 @@ if __name__ == "__main__":
         input('action taken, proceed?')
         input('About to check the vision state change status, proceed?')
         msg = state_change_prompt + action_str
-        Done_signal = model.generate_action(env.img_path, msg = msg)
-        print('Done signal is : ', Done_signal)
-        input('proceed? ')
+        signal = model.generate_action(env.img_path, msg = msg)
+        done_signal, reason = parse_done(signal)
+        print('Done signal is : ', done_signal)
+        input('proceed to next iteration? ')
 
 
 
