@@ -43,8 +43,22 @@ G.add_edges_from([(2, 1), (0, 1)])
 print(G.nodes)
 print(G.edges)
 print(G.nodes[1])
+#G.add_edge(2, 3, action='click')
 
+def add_interaction(G, prev_state, state , action, type):
+    if G.has_node(state):
+        G.add_edge(prev_state, state, action=action)
+    else:
+        G.add_node(state, type=type)
+        G.add_edge(prev_state, state, action=action)
+
+add_interaction(G, 2, 3, 'click', 'valorant')
+add_interaction(G, 2, 4, 'double_click', 'notepad')
+add_interaction(G, 2, 5, 'type', 'valorant_b')
+add_interaction(G, 5, 0, 'type', 'valorant_b')
+print(G.nodes[0])
 import matplotlib.pyplot as plt
 subax1 = plt.subplot(121)
 nx.draw(G, pos=nx.circular_layout(G), node_color='r', edge_color='b')
 plt.show()
+
