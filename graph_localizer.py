@@ -3,21 +3,48 @@ This is the file which helps the model to localize the state it feels it is in f
 
 Firstly we will try to use gpt-4v and check if we are able to localize properly 
 
+Key inputs for it to take actions : (for deciding the task )
+1) Your prompt - either in the form of text, or your audio(text)
+2) memory patters - from past actions ( tidious or tough things which can be guessed from memory)
+3) prediction - 
+		example - buying pizza requires you to actually navigate to the pizza site 
+
+Input( for the model) :
+1) observation - current screenshot 
+2) trajectory of actions - 
+3) understanding of state - inferred from 1,2 
+
 '''
-import pyautogui
-import numpy as np
-import time 
+# import torch
+# from torch_geometric.data import Data
 
-def process_screenshot( screenshot):
-        # Example: Convert the screenshot to a numpy array
-        observation = np.array(screenshot)
-        return observation
+# edge_index = torch.tensor([[0, 1, 1, 2],
+#                            [1, 0, 2, 1]], dtype=torch.long)
+# x = torch.tensor([[-1], [0], [1]], dtype=torch.float)
+# print(edge_index)
+# #print(x)
+# #data = Data(x=x, edge_index=edge_index)
+# data = Data(x=x, edge_index=edge_index.t().contiguous())
+# #Data(edge_index=[2, 4], x=[3, 1])
+# print(Data)
+# print(data.num_nodes)
+# #print(Data.edges)
 
-if __name__ == "__main__":
-        print('hi')
-        time.sleep(2)
-        screenshot = pyautogui.screenshot()
-        observation = process_screenshot(screenshot)
-        path = 'graph_images/screenshot' + '.jpg' # for one path 
-        screenshot.save(path)
-        image_path = path
+# trying out the graph using nx
+import networkx as nx
+G = nx.DiGraph()
+
+G.add_nodes_from([0], type='home_screen')
+G.add_nodes_from([1], type='valorant')
+G.add_nodes_from([2], type='youtube')
+G.add_edge(1, 2)
+G.add_edges_from([(2, 1), (0, 1)])
+
+print(G.nodes)
+print(G.edges)
+print(G.nodes[1])
+
+import matplotlib.pyplot as plt
+subax1 = plt.subplot(121)
+nx.draw(G, pos=nx.circular_layout(G), node_color='r', edge_color='b')
+plt.show()
