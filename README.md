@@ -35,10 +35,13 @@ In the terminal
 1) Add selenium env
 2) make a module once the agent is working
 3) release the agent named mango bot on this env
+4) add hower option in the environment
+5) train a base model on mind2web
+6) add decision transformer for oracle grounding of the selected actions 
 
 The examples of the environment workings are below :
 
-1)Pure RL environment with different tool use in paint:
+1) Pure RL environment with different tool use in paint:
 
 ![2023-12-01 03-45-18](https://github.com/daydreamersAI/mango/assets/61907310/55fd7a07-8ad0-4a4b-95ef-71dee3e37918)
 

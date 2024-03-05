@@ -251,7 +251,11 @@ if __name__ == "__main__":
     # so this should take in image and task from the environment 
     msg = system_prompt + task
     # action = model.generate_action(env.img_path,msg = msg)
-
+    ###################### trial
+    #print(env.image_path)
+    action_str = model.generate_action(env.img_path,msg = state_change_prompt + 'Click the rectangle icon')
+    print(action_str)
+    ######################
     # obs,rew,done,info = env.step(action)
     # time.sleep(2)
 
@@ -259,46 +263,47 @@ if __name__ == "__main__":
     # firstly get the decision policy with high level actions 
     chat_model = Chat_Model(task)
     # action_sequence = chat_model.generate_completion(user_message = action_sequence_prompt + task,system_message = "You are a helpful assistant designed to output high level tasks " )
-    action_sequence = chat_model.generate_completion(user_message = policy_prompt + task,system_message = "You are a helpful assistant designed to output high level tasks " + system_prompt )
-    actions_list = action_sequence.strip().split('\n')
+    ######
+    # action_sequence = chat_model.generate_completion(user_message = policy_prompt + task,system_message = "You are a helpful assistant designed to output high level tasks " + system_prompt )
+    # actions_list = action_sequence.strip().split('\n')
 
-    # Find the length of the list of actions
-    actions_length = len(actions_list)
+    # # Find the length of the list of actions
+    # actions_length = len(actions_list)
 
-    #action_sequence = chat_model.generate_completion()
-    print('This is the action sequence : ')
-    print(action_sequence)
-    input('proceed to taking the actions? ')
-    done_signal = 'True'
-    reason = 'This is the first action so no reason'
-    for i in range(actions_length):
-        done_signal
-        final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task + 'Also keep in mind to return only one action at one time' + 'Also the done signal and reason for the last action are given here:'+ done_signal + 'and reason: ' + reason
-        input("the prompt that will be given to the vision model is as follows : \n")
-        # print(final_prompt)
-        action_str = model.generate_action(env.img_path,msg = final_prompt) # here vision could also be passed
-        #action_str = chat_model.generate_action(msg = final_prompt)
-        print('below is the action produced : ')
-        print(action_str)
-        print('action type is :', {type(action_str)})
-        input('this was the type of action, proceed?')
+    # #action_sequence = chat_model.generate_completion()
+    # print('This is the action sequence : ')
+    # print(action_sequence)
+    # input('proceed to taking the actions? ')
+    # done_signal = 'True'
+    # reason = 'This is the first action so no reason'
+    # for i in range(actions_length):
+    #     done_signal
+    #     final_prompt = msg + actor_prompt + action_sequence + actor_prompt_task + task + 'Also keep in mind to return only one action at one time' + 'Also the done signal and reason for the last action are given here:'+ done_signal + 'and reason: ' + reason
+    #     input("the prompt that will be given to the vision model is as follows : \n")
+    #     # print(final_prompt)
+    #     action_str = model.generate_action(env.img_path,msg = final_prompt) # here vision could also be passed
+    #     #action_str = chat_model.generate_action(msg = final_prompt)
+    #     print('below is the action produced : ')
+    #     print(action_str)
+    #     print('action type is :', {type(action_str)})
+    #     input('this was the type of action, proceed?')
 
 
-        # action = action[:9]
-        action = parser_2(action_str)
-        input(f"the action we got from parser is : {action}\n Proceed now ?")
-        action = create_action(action)
-        input(f"the action we are going to take is : {action}\n Proceed now ?")
-        obs,rew,done,info = env.step(action)
-        time.sleep(2)
-        print(obs,rew,done,info)
-        input('action taken, proceed?')
-        input('About to check the vision state change status, proceed?')
-        msg = state_change_prompt + action_str
-        signal = model.generate_action(env.img_path, msg = msg)
-        done_signal, reason = parse_done(signal)
-        print('Done signal is : ', done_signal)
-        input('proceed to next iteration? ')
+    #     # action = action[:9]
+    #     action = parser_2(action_str)
+    #     input(f"the action we got from parser is : {action}\n Proceed now ?")
+    #     action = create_action(action)
+    #     input(f"the action we are going to take is : {action}\n Proceed now ?")
+    #     obs,rew,done,info = env.step(action)
+    #     time.sleep(2)
+    #     print(obs,rew,done,info)
+    #     input('action taken, proceed?')
+    #     input('About to check the vision state change status, proceed?')
+    #     msg = state_change_prompt + action_str
+    #     signal = model.generate_action(env.img_path, msg = msg)
+    #     done_signal, reason = parse_done(signal)
+    #     print('Done signal is : ', done_signal)
+    #     input('proceed to next iteration? ')
 
 
 

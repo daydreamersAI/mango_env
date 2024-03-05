@@ -79,8 +79,9 @@ if __name__ == "__main__":
     gpt4_chat_model = GPT4VisionChatModel(api_key=client.api_key)
 
     # User's message and image path
-    user_message = "What’s in this image?"
+    user_message = "Can you describe the image?"
     image_path = "screenshots/screenshot0.jpg"
+    # image_path = "graph_images/screenshot.jpg" for testing 
 
     # Generate completion
     # jsn, completion = gpt4_chat_model.generate_completion(user_message, image_path)
