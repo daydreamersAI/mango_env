@@ -2,7 +2,8 @@
 The different environments for the mango bot :
 
 Mango bot(agent based on this environment) will be released soon 
-Join discord to help with the agent - https://discord.gg/Cfa7ACqr
+Join discord to help with the agent or directly contribute by sending a pull request
+Discord link - https://discord.gg/Cfa7ACqr
 # mango bot
 A computer bot that can paint and do other stuff on your computer
 
@@ -13,8 +14,9 @@ The main idea of this project is to use the power of gpt-4/image models as an ob
 
 Features :
 two types of envs are together :
-1) Simple rl env based on the pyautogui module
-2) Selenium based rl env that could take web actions - coming soon (positively on christmas eve)
+1) Simple rl env based on the pyautogui module - ( in env.py for now )
+2) Selenium based rl env that could take web actions - coming soon 
+3) Playwright based rl env with action traces - coming soon
 
 Below is some set of example actions being executed using this env which have been fed manually
 Try out your set of actions and have fun... :]
